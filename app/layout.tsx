@@ -35,7 +35,7 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <MergeProvider>
-        <html lang="en">
+        <html lang="en" suppressHydrationWarning>
           <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
             <header className="flex justify-between items-center p-4 gap-4 h-16 bg-gray-100">
               <div className="flex items-center gap-6">
