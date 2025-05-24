@@ -64,3 +64,4 @@ export default function RootLayout({
     </ClerkProvider>
   )
 }
+// Removed UpgradeModal import and related code
