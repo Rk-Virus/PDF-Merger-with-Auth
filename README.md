@@ -1,15 +1,12 @@
 # PDF Guide
 
-A Next.js application for merging PDF files with a freemium model. Users get 2 free merges and can upgrade to a premium plan or pay per merge for additional merges.
+A Next.js application for merging PDF files with a freemium model. Users can merge files after creating a free account.
 
 ## Features
 
 - PDF merging with pdf-lib
 - Drag and drop file upload
 - Authentication with Clerk
-- Freemium model with 2 free merges
-- Premium subscription option
-- Pay-per-merge option
 - MongoDB for storing user data and merge transactions
 
 ## Getting Started
@@ -51,14 +48,6 @@ The following environment variables are required:
 1. Sign up or log in using Clerk authentication
 2. Upload PDF files by dragging and dropping or using the file picker
 3. Click the "Merge PDFs" button to combine the files
-4. If you've used your free merges, you'll be prompted to upgrade to premium or pay for a single merge
-
-## Freemium Model
-
-- All users get 2 free PDF merges
-- After using the free merges, users can:
-  - Upgrade to a premium plan for unlimited merges ($9.99)
-  - Pay for a single merge ($1.99)
 
 ## Development
 
@@ -74,9 +63,7 @@ The following environment variables are required:
 
 - `/api/merge/check`: Check if a user can merge PDFs
 - `/api/merge/record`: Record a merge transaction
-- `/api/merge/pay`: Process a payment for a single merge
-- `/api/upgrade`: Upgrade a user to premium
-
+  
 ## License
 
 This project is licensed under the MIT License.
