@@ -14,7 +14,7 @@ export default function About() {
           </p>
           <p className="text-lg md:text-xl text-gray-700 mb-6 leading-relaxed">
             Built with modern web technologies, PDF Guide ensures a seamless experience
-            whether you're a professional handling large documents or an individual
+            whether you&apos;re a professional handling large documents or an individual
             working with personal files.
           </p>
         </div>

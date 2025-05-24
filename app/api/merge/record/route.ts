@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { currentUser } from '@clerk/nextjs/server';
 import clientPromise from '@/lib/mongodb';
+import type { Document } from 'mongodb';
 
 export async function POST(req: NextRequest) {
   try {
@@ -35,7 +36,7 @@ export async function POST(req: NextRequest) {
     await transactionsCollection.insertOne(transaction);
     
     // Update user's merge count and free merges remaining
-    const updateData: any = {
+    const updateData: Document = {
       $inc: { mergeCount: 1 },
       $set: { updatedAt: new Date() }
     };

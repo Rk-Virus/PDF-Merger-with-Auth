@@ -1,10 +1,10 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { currentUser } from '@clerk/nextjs/server';
 import clientPromise from '@/lib/mongodb';
 
 // This is a simplified payment endpoint
 // In a real application, you would integrate with a payment provider like Stripe
-export async function POST(req: NextRequest) {
+export async function POST() {
   try {
     const user = await currentUser();
     

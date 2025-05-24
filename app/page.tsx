@@ -1,7 +1,7 @@
 'use client';
 
 import Image from "next/image";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { PDFDocument } from 'pdf-lib';
 import { useMerge } from '@/context/MergeContext';
 import { useAuth } from '@clerk/nextjs';
