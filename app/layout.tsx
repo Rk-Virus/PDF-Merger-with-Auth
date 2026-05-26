@@ -39,9 +39,10 @@ export default function RootLayout({
           <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
             <header className="flex justify-between items-center p-4 gap-4 h-16 bg-gray-100">
               <div className="flex items-center gap-6">
-                <h1 className="text-gray-800 text-xl font-bold">PDF Guide</h1>
+                <Link href="/" className="text-gray-800 text-xl font-bold cursor-pointer">PDF Guide</Link>
                 <nav className="flex space-x-6">
-                  <Link href="/" className="text-gray-700 hover:text-blue-600 transition-colors font-semibold text-lg">Home</Link>
+                  <Link href="/" className="text-gray-700 hover:text-blue-600 transition-colors font-semibold text-lg">Merge</Link>
+                  <Link href="/remove" className="text-gray-700 hover:text-blue-600 transition-colors font-semibold text-lg">Remove</Link>
                   <Link href="/about" className="text-gray-700 hover:text-blue-600 transition-colors font-semibold text-lg">About</Link>
                   <Link href="/contact" className="text-gray-700 hover:text-blue-600 transition-colors font-semibold text-lg">Contact</Link>
                 </nav>
