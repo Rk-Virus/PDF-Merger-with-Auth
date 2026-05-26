@@ -5,6 +5,7 @@ A Next.js application for merging PDF files with a freemium model. Users can mer
 ## Features
 
 - PDF merging with pdf-lib
+- PDF page removal with pdf-lib
 - Drag and drop file upload
 - Authentication with Clerk
 - MongoDB for storing user data and merge transactions
@@ -33,21 +34,11 @@ A Next.js application for merging PDF files with a freemium model. Users can mer
    npm run dev
    ```
 
-### Environment Variables
-
-The following environment variables are required:
-
-- `CLERK_SECRET_KEY`: Your Clerk secret key
-- `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`: Your Clerk publishable key
-- `CLERK_WEBHOOK_SECRET`: Your Clerk webhook secret
-- `MONGODB_URI`: Your MongoDB connection string
-- `NEXT_PUBLIC_APP_URL`: The URL of your application
-
 ## Usage
 
 1. Sign up or log in using Clerk authentication
 2. Upload PDF files by dragging and dropping or using the file picker
-3. Click the "Merge PDFs" button to combine the files
+3. Click the "Merge PDFs / Remove Pages" button to apply the effects.
 
 ## Development
 
