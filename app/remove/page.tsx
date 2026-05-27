@@ -3,7 +3,6 @@
 import Image from "next/image";
 import { useState } from "react";
 import { PDFDocument } from 'pdf-lib';
-import { useMerge } from '@/context/MergeContext';
 import { useAuth } from '@clerk/nextjs';
 
 interface FileItem {

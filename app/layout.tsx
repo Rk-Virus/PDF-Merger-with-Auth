@@ -9,6 +9,7 @@ import {
 } from '@clerk/nextjs'
 import { Geist, Geist_Mono } from 'next/font/google'
 import Link from 'next/link'
+// @ts-ignore: CSS global import type declarations are not present in this project setup
 import './globals.css'
 import { MergeProvider } from '@/context/MergeContext'
 
