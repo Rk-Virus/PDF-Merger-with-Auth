@@ -20,6 +20,7 @@ export default function RemovePages() {
     const [selectedFile, setSelectedFile] = useState<FileItem | null>(null);
     const [pageCount, setPageCount] = useState<number>(0);
     const [removedPages, setRemovedPages] = useState<Set<number>>(new Set());
+    const [pagePreviews, setPagePreviews] = useState<{ page: number; url: string }[]>([]);
 
     const { isSignedIn } = useAuth();
 
@@ -31,17 +32,13 @@ export default function RemovePages() {
 
         const file = event.target.files?.[0];
         if (file) {
-            const fileItem = {
-                name: file.name,
-                size: file.size,
-                file: file
-            }
-            setFiles([fileItem])
-            await loadPdfMetadata(fileItem);
+            const fileItem = { name: file.name, size: file.size, file };
+            setFiles([fileItem]);
+            await loadPdfPreviews(fileItem);
         }
     };
 
-    const handleDrop = (event: React.DragEvent) => {
+    const handleDrop = async (event: React.DragEvent) => {
         event.preventDefault();
 
         if (!isSignedIn) {
@@ -51,13 +48,9 @@ export default function RemovePages() {
 
         const file = event.dataTransfer.files?.[0];
         if (file) {
-            const fileItem = {
-                name: file.name,
-                size: file.size,
-                file: file
-            };
-            setFiles([fileItem])
-            loadPdfMetadata(fileItem)
+            const fileItem = { name: file.name, size: file.size, file };
+            setFiles([fileItem]);
+            await loadPdfPreviews(fileItem);
         }
     };
 
@@ -66,7 +59,11 @@ export default function RemovePages() {
     };
 
     const clearFiles = () => {
+        cleanupPreviews();
         setFiles([]);
+        setSelectedFile(null);
+        setPageCount(0);
+        setRemovedPages(new Set());
     };
 
     const formatFileSize = (bytes: number) => {
@@ -153,6 +150,35 @@ export default function RemovePages() {
         }
     };
 
+    const loadPdfPreviews = async (fileItem: FileItem) => {
+        const pdfBytes = await fileItem.file.arrayBuffer();
+        const pdf = await PDFDocument.load(pdfBytes);
+
+        const previews: { page: number; url: string }[] = [];
+
+        for (let i = 0; i < pdf.getPageCount(); i += 1) {
+            const pageDoc = await PDFDocument.create();
+            const [copiedPage] = await pageDoc.copyPages(pdf, [i]);
+            pageDoc.addPage(copiedPage);
+            const singlePageBytes = await pageDoc.save();
+
+            const blob = new Blob([new Uint8Array(singlePageBytes)], { type: 'application/pdf' });
+            const url = URL.createObjectURL(blob);
+
+            previews.push({ page: i + 1, url });
+        }
+
+        setSelectedFile(fileItem);
+        setPageCount(pdf.getPageCount());
+        setRemovedPages(new Set());
+        setPagePreviews(previews);
+    };
+
+    const cleanupPreviews = () => {
+        pagePreviews.forEach(({ url }) => URL.revokeObjectURL(url));
+        setPagePreviews([]);
+    };
+
     return (
         <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
             <main className="max-w-7xl mx-auto px-4 py-12">
@@ -214,23 +240,24 @@ export default function RemovePages() {
                         </div>
                     </div>
 
-                    {selectedFile && pageCount > 0 && (
+                    {pagePreviews.length > 0 && (
                         <div className="mt-6">
-                            <h3 className="text-lg font-medium text-gray-900 mb-4">Choose pages to remove</h3>
-                            <div className="grid grid-cols-3 gap-3">
-                                {Array.from({ length: pageCount }, (_, index) => {
-                                    const pageNumber = index + 1;
-                                    return (
-                                        <label key={pageNumber} className="flex items-center gap-2 p-3 bg-gray-50 rounded-lg border">
-                                            <input
-                                                type="checkbox"
-                                                checked={removedPages.has(pageNumber)}
-                                                onChange={() => togglePageSelection(pageNumber)}
-                                            />
-                                            <span className="text-gray-600">Page {pageNumber}</span>
-                                        </label>
-                                    );
-                                })}
+                            <h3 className="text-lg font-medium text-gray-900 mb-4">Preview pages</h3>
+                            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                                {pagePreviews.map(({ page, url }) => (
+                                    <button
+                                        key={page}
+                                        type="button"
+                                        onClick={() => togglePageSelection(page)}
+                                        className={`group border rounded-2xl overflow-hidden text-left p-0 ${removedPages.has(page) ? 'border-red-500 ring-2 ring-red-200' : 'border-gray-200 hover:border-blue-500'}`}
+                                    >
+                                        <div className="text-sm font-semibold px-3 py-2 bg-white">{`Page ${page}`}</div>
+                                        <embed src={url} type="application/pdf" className="w-full h-40" />
+                                        <div className="px-3 py-2 text-sm text-gray-600">
+                                            {removedPages.has(page) ? 'Marked for removal' : 'Click to remove'}
+                                        </div>
+                                    </button>
+                                ))}
                             </div>
                         </div>
                     )}
