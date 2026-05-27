@@ -17,7 +17,6 @@ export default function RemovePages() {
     const [error, setError] = useState<string | null>(null);
 
     const [selectedFile, setSelectedFile] = useState<FileItem | null>(null);
-    const [pageCount, setPageCount] = useState<number>(0);
     const [removedPages, setRemovedPages] = useState<Set<number>>(new Set());
     const [pagePreviews, setPagePreviews] = useState<{ page: number; url: string }[]>([]);
 
@@ -61,7 +60,6 @@ export default function RemovePages() {
         cleanupPreviews();
         setFiles([]);
         setSelectedFile(null);
-        setPageCount(0);
         setRemovedPages(new Set());
     };
 
@@ -71,15 +69,6 @@ export default function RemovePages() {
         const sizes = ['Bytes', 'KB', 'MB', 'GB'];
         const i = Math.floor(Math.log(bytes) / Math.log(k));
         return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-    };
-
-    // pdf remove pages related functions
-    const loadPdfMetadata = async (fileItem: FileItem) => {
-        const pdfBytes = await fileItem.file.arrayBuffer();
-        const pdf = await PDFDocument.load(pdfBytes);
-        setSelectedFile(fileItem);
-        setPageCount(pdf.getPageCount());
-        setRemovedPages(new Set());
     };
 
     const togglePageSelection = (pageNumber: number) => {
@@ -139,7 +128,6 @@ export default function RemovePages() {
 
             setSelectedFile(null);
             setFiles([]);
-            setPageCount(0);
             setRemovedPages(new Set());
         } catch (err) {
             console.error('Error removing pages:', err);
@@ -168,7 +156,6 @@ export default function RemovePages() {
         }
 
         setSelectedFile(fileItem);
-        setPageCount(pdf.getPageCount());
         setRemovedPages(new Set());
         setPagePreviews(previews);
     };
